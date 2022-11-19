@@ -18,3 +18,18 @@ body {
   max-width: 320px;
   margin-bottom: 16px;
 }
+.card-img {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+img {
+  width: 80px;
+  height: 45px;
+}
+span {
+  margin-right: 10px;
+  font-weight: bolder;
+  font-size: 18px;
+}
