@@ -12,14 +12,26 @@ const refs = {
 
 refs.searchForm.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 
-function onSearch(evt) {
-  const input = evt.target.value.trim();
+function onSearch() {
+  const searchName = refs.searchForm.value.trim();
 
-  if (!input) {
-    refs.countryCard.remove();
+  if (searchName === '') {
+    refs.countryCard.innerHTML = '';
+    refs.countryList.innerHTML = '';
   }
 
-  API.fetchCountries(input).then(renderCountryCard).catch(onFetchError);
+  API.fetchCountries(searchName)
+    .then(countries => {
+      if (countries.length === 1) {
+        refs.countryList.innerHTML = '';
+        return renderCountryCard(countries);
+      } else if (countries.length >= 10) {
+        return onManyMatch();
+      } else {
+        return renderCountryList(countries);
+      }
+    })
+    .catch(onFetchError);
 }
 
 function renderCountryCard(arr) {
@@ -41,7 +53,21 @@ function renderCountryCard(arr) {
     .join('');
   refs.countryCard.innerHTML = markup;
 }
+function renderCountryList(arr) {
+  const markup = arr
+    .map(
+      item => `<div class="card-img">
+    <img src=${item.flags.svg} alt=${item.name}/>
+    <h1 class="card-title">${item.name}</h1>
+</div>`
+    )
+    .join('');
+  refs.countryList.innerHTML = markup;
+}
 
 function onFetchError(error) {
   Notify.failure('Oops, there is no country with that name');
+}
+function onManyMatch() {
+  Notify.info('Too many matches found. Please enter a more specific name.');
 }
