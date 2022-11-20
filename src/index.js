@@ -28,6 +28,7 @@ function onSearch() {
       } else if (countries.length >= 10) {
         return onManyMatch();
       } else {
+        refs.countryCard.innerHTML = '';
         return renderCountryList(countries);
       }
     })
