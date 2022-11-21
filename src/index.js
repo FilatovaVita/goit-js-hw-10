@@ -18,6 +18,7 @@ function onSearch() {
   if (searchName === '') {
     refs.countryCard.innerHTML = '';
     refs.countryList.innerHTML = '';
+    return;
   }
 
   API.fetchCountries(searchName)
